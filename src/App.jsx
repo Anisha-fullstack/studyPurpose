@@ -1,34 +1,47 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-
+import List from './list'
+import AddItem from './addItem'
+import { BrowserRouter as Router ,Route,Routes, useNavigate,useLocation} from 'react-router-dom'
+import HeaderD from './headerD'
+import TableContent from './tableContent'
 function App() {
-  const [count, setCount] = useState(0)
+    const navigate = useNavigate(); // ✅ useNavigate instead of history.push
+      const location = useLocation(); // ✅ get current route
 
+const [showButton,setShowButton]=useState(true);
+
+ useEffect(() => {
+    if (location.pathname === '/') {
+      setShowButton(true);
+    } else {
+      setShowButton(false);
+    }
+  }, [location]);
+  const [items,setItems]=useState([{id:1,name:"first checkbox",checked:false},
+    
+    {id:7,name:"second checkbox",checked:false},
+    {id:2,name:"third checkbox",checked:false},
+    {id:3,name:"fourth checkbox",checked:false},
+    {id:4,name:"fifth checkbox",checked:false},
+    {id:5,name:"sixth checkbox",checked:false},
+    {id:6,name:"seventh checkbox",checked:false}
+  ])
+const show=()=>{
+  setShowButton(false)
+  navigate("/list")
+}
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <HeaderD/>
+    {showButton && (<button onClick={show}>Show Items</button>)}
+    <Routes> 
+        <Route path="/list" element={<List items={items} setItems={setItems}/>}></Route>
+    </Routes>
+    
+   </>
   )
 }
 
